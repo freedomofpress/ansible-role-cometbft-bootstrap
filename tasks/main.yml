@@ -1,0 +1,29 @@
+---
+- name: Ensure local testnet dir exists
+  ansible.builtin.file:
+    path: "{{ cometbft_testnet_dir }}"
+    state: directory
+
+- name: Calculate validator / node counts
+  ansible.builtin.set_fact:
+    cometbft_num_validators: "{{ groups['cometbft_validators'] | length }}"
+    cometbft_num_nodes: "{{ groups['cometbft_validators'] | length + groups['cometbft_sentries'] | length }}"
+
+- name: Generate testnet configs with cometbft testnet
+  ansible.builtin.command: >
+    docker run --rm
+    -v {{ cometbft_testnet_dir }}:/net
+    {{ cometbft_docker_image }}
+    testnet
+    --v {{ cometbft_num_validators }}
+    --n {{ cometbft_num_nodes }}
+    --o /net
+  args:
+    creates: "{{ cometbft_testnet_dir }}/node0/config/genesis.json"
+
+- name: Ensure testnet configs are readable for rsync of config to the nodes
+  become: true
+  ansible.builtin.file:
+    path: "{{ cometbft_testnet_dir }}"
+    recurse: true
+    mode: "u=rwX,g=rX,o=rX"
