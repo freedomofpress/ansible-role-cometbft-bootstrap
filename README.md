@@ -42,7 +42,7 @@ The inventory attributes for each group:
 ### cometbft group
 ```
 # Version
-cometbft_version: "v0.38.19"
+cometbft_version: "v0.34.35"
 
 # Where the node home lives on each machine
 cometbft_home: "/opt/cometbft"
