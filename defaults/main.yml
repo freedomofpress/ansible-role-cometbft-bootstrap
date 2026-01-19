@@ -10,4 +10,4 @@ cometbft_home: "/opt/cometbft"
 cometbft_testnet_dir: "/tmp/comet-testnet"
 
 # Docker image
-cometbft_docker_image: "cometbft/cometbft:{{ cometbft_version }}"
+cometbft_docker_image: "docker.io/cometbft/cometbft:{{ cometbft_version }}"
