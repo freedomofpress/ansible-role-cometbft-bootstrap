@@ -11,3 +11,6 @@ cometbft_testnet_dir: "/tmp/comet-testnet"
 
 # Docker image
 cometbft_docker_image: "docker.io/cometbft/cometbft:{{ cometbft_version }}"
+
+# Whether to prefer podman over docker for local container commands.
+cometbft_use_podman: false

@@ -9,7 +9,7 @@
     cometbft_num_validators: "{{ groups['cometbft_validators'] | length }}"
     cometbft_num_nodes: "{{ groups['cometbft_validators'] | length + groups['cometbft_sentries'] | length }}"
 
-- name: Generate testnet configs with cometbft testnet
+- name: Generate testnet configs with cometbft testnet (docker)
   ansible.builtin.command: >
     docker run --rm
     -v {{ cometbft_testnet_dir }}:/net
@@ -20,6 +20,20 @@
     --o /net
   args:
     creates: "{{ cometbft_testnet_dir }}/node0/config/genesis.json"
+  when: not cometbft_use_podman
+
+- name: Generate testnet configs with cometbft testnet (podman)
+  ansible.builtin.command: >
+    podman run --rm --user=0
+    -v {{ cometbft_testnet_dir }}:/net
+    {{ cometbft_docker_image }}
+    testnet
+    --v {{ cometbft_num_validators }}
+    --n {{ cometbft_num_nodes }}
+    --o /net
+  args:
+    creates: "{{ cometbft_testnet_dir }}/node0/config/genesis.json"
+  when: cometbft_use_podman
 
 - name: Ensure testnet configs are readable for rsync of config to the nodes
   become: true
