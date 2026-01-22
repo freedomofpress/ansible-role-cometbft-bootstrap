@@ -7,7 +7,7 @@
 - name: Calculate validator / node counts
   ansible.builtin.set_fact:
     cometbft_num_validators: "{{ groups['cometbft_validators'] | length }}"
-    cometbft_num_nodes: "{{ groups['cometbft_validators'] | length + groups['cometbft_sentries'] | length }}"
+    cometbft_num_nodes: "{{ groups['cometbft_sentries'] | length }}"
 
 - name: Generate testnet configs with cometbft testnet (docker)
   ansible.builtin.command: >
